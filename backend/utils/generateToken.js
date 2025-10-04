@@ -8,8 +8,10 @@ const generateTokenAndSetCookie = (userId, res) => {
 	res.cookie("jwt", token, {
 		maxAge: 15 * 24 * 60 * 60 * 1000, // MS
 		httpOnly: true, // prevent XSS attacks cross-site scripting attacks
-		sameSite: "strict", // CSRF attacks cross-site request forgery attacks
-		secure: process.env.NODE_ENV !== "development",
+		// When deploying frontend and backend on different domains, use 'none' and secure=true.
+		// In development (localhost) we keep 'strict' to simplify local testing.
+		sameSite: process.env.NODE_ENV === "development" ? "strict" : "none",
+		secure: process.env.NODE_ENV === "production",
 	});
 };
 
