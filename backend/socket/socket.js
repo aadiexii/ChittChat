@@ -5,10 +5,15 @@ import express from "express";
 const app = express();
 
 const server = http.createServer(app);
-const CLIENT_ORIGIN = process.env.FRONTEND_URL || "http://localhost:3000";
+const rawFrontendUrls = process.env.FRONTEND_URLS || process.env.FRONTEND_URL || "http://localhost:3000";
+const CLIENT_ORIGINS = rawFrontendUrls
+	.split(",")
+	.map((s) => s.trim().replace(/\/$/, ""))
+	.filter(Boolean);
+
 const io = new Server(server, {
 	cors: {
-		origin: [CLIENT_ORIGIN],
+		origin: CLIENT_ORIGINS,
 		methods: ["GET", "POST"],
 		credentials: true,
 	},

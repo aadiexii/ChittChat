@@ -23,13 +23,18 @@ app.use(cookieParser());
 
 // Allow requests from one or more frontends. Set FRONTEND_URL or FRONTEND_URLS (comma separated)
 const rawFrontendUrls = process.env.FRONTEND_URLS || process.env.FRONTEND_URL || "http://localhost:3000";
-const FRONTEND_URLS = rawFrontendUrls.split(",").map((s) => s.trim());
+// Normalize: split csv, trim whitespace and remove any trailing slash so comparisons match the browser Origin header
+const FRONTEND_URLS = rawFrontendUrls
+	.split(",")
+	.map((s) => s.trim().replace(/\/$/, ""))
+	.filter(Boolean);
 
 const corsOptions = {
 	origin: (origin, callback) => {
 		// allow non-browser requests like curl or same-origin requests with no origin
 		if (!origin) return callback(null, true);
-		if (FRONTEND_URLS.includes(origin)) {
+		const normalizedOrigin = origin.replace(/\/$/, "");
+		if (FRONTEND_URLS.includes(normalizedOrigin)) {
 			return callback(null, true);
 		}
 		console.log("CORS blocked for origin:", origin, "allowed:", FRONTEND_URLS);
