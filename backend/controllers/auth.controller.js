@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
+import { sendEmail } from "../utils/sendEmail.js";
+import { welcomeTemplate } from "../utils/mailTemplates/welcome_mail.js";
 
 export const signup = async (req, res) => {
   try {
@@ -25,7 +27,9 @@ export const signup = async (req, res) => {
     // Check if username or email exists
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
-      return res.status(400).json({ error: "Username or email already exists" });
+      return res
+        .status(400)
+        .json({ error: "Username or email already exists" });
     }
 
     // HASH PASSWORD HERE
@@ -49,7 +53,14 @@ export const signup = async (req, res) => {
     if (newUser) {
       // Generate JWT token here
       generateTokenAndSetCookie(newUser._id, res);
-      await newUser.save();
+      const savedUser = await newUser.save();
+
+      const sendmail = await sendEmail(
+        newUser.email,
+        "Welcome to ChitChat! 🎉",
+        welcomeTemplate(newUser.fullName, newUser.username)
+      );
+
 
       res.status(201).json({
         _id: newUser._id,
