@@ -1,6 +1,6 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
-import { getReceiverSocketId, io, getAllOnlineUsers } from "../socket/socket.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
 	try {
@@ -31,28 +31,15 @@ export const sendMessage = async (req, res) => {
 		// await conversation.save();
 		// await newMessage.save();
 
-		// this will run in parallel
-		console.log('About to save conversation and message:', {
-			conversation: { id: conversation._id, participants: conversation.participants?.slice?.(0, 10) },
-			newMessage: { senderId: newMessage.senderId, receiverId: newMessage.receiverId, message: newMessage.message },
-		});
+		// save conversation and message in parallel
 		await Promise.all([conversation.save(), newMessage.save()]);
 
-		// SOCKET IO FUNCTIONALITY WILL GO HERE
+		// SOCKET IO: emit to receiver if they're online
 		const receiverSocketId = getReceiverSocketId(receiverId);
 		console.log("Attempting to send socket message to receiverId:", receiverId, "socketId:", receiverSocketId);
-		// Guard getAllOnlineUsers in case an older deployed build doesn't export it
-		let onlineMap = {};
-		try {
-			if (typeof getAllOnlineUsers === 'function') {
-				onlineMap = getAllOnlineUsers();
-			} else {
-				console.warn('getAllOnlineUsers is not a function or not available');
-			}
-		} catch (e) {
-			console.warn('Error while calling getAllOnlineUsers:', e && e.message);
+		if (receiverSocketId) {
+			io.to(receiverSocketId).emit("newMessage", newMessage);
 		}
-		console.log('Current online user map:', onlineMap);
 		if (receiverSocketId) {
 			// io.to(<socket_id>).emit() used to send events to specific client
 			io.to(receiverSocketId).emit("newMessage", newMessage);
@@ -61,12 +48,6 @@ export const sendMessage = async (req, res) => {
 		res.status(201).json(newMessage);
 	} catch (error) {
 		console.error("Error in sendMessage controller:", error);
-		// provide more contextual info in logs to help debugging
-		if (error && error.stack) console.error(error.stack);
-		if (process.env.DEBUG_SEND === 'true') {
-			// return error details for debugging (should not be enabled in production long-term)
-			return res.status(500).json({ error: "Internal server error", details: error.message });
-		}
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
