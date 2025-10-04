@@ -33,7 +33,8 @@ const corsOptions = {
 			return callback(null, true);
 		}
 		console.log("CORS blocked for origin:", origin, "allowed:", FRONTEND_URLS);
-		return callback(new Error("Not allowed by CORS"), false);
+		// Don't pass an Error here (that causes a 500). Instead tell CORS to deny the origin.
+		return callback(null, false);
 	},
 	credentials: true,
 };
