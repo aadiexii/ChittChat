@@ -4,16 +4,18 @@ import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const signup = async (req, res) => {
 	try {
-		const { fullName, username, password, confirmPassword, gender } = req.body;
+		const { fullName, email, username, password, confirmPassword, gender } = req.body;
 
 		if (password !== confirmPassword) {
 			return res.status(400).json({ error: "Passwords don't match" });
 		}
 
-		const user = await User.findOne({ username });
-
-		if (user) {
-			return res.status(400).json({ error: "Username already exists" });
+		// Check for existing username or email
+		const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+		if (existingUser) {
+			if (existingUser.username === username) return res.status(400).json({ error: "Username already exists" });
+			if (email && existingUser.email === email) return res.status(400).json({ error: "Email already exists" });
+			return res.status(400).json({ error: "User already exists" });
 		}
 
 		// HASH PASSWORD HERE
@@ -27,6 +29,7 @@ export const signup = async (req, res) => {
 
 		const newUser = new User({
 			fullName,
+			email,
 			username,
 			password: hashedPassword,
 			gender,
@@ -34,8 +37,8 @@ export const signup = async (req, res) => {
 		});
 
 		if (newUser) {
-			// Generate JWT token here
-			generateTokenAndSetCookie(newUser._id, res);
+			// Generate JWT token here and return it in response for Authorization header fallback
+			const token = generateTokenAndSetCookie(newUser._id, res);
 			await newUser.save();
 
 			res.status(201).json({
@@ -43,12 +46,21 @@ export const signup = async (req, res) => {
 				fullName: newUser.fullName,
 				username: newUser.username,
 				profilePic: newUser.profilePic,
+				token,
 			});
 		} else {
 			res.status(400).json({ error: "Invalid user data" });
 		}
 	} catch (error) {
 		console.log("Error in signup controller", error.message);
+		// Handle duplicate key error (E11000)
+		if (error.code === 11000) {
+			const dupKey = Object.keys(error.keyValue || {})[0];
+			if (dupKey) {
+				return res.status(400).json({ error: `${dupKey} already exists` });
+			}
+			return res.status(400).json({ error: "Duplicate key error" });
+		}
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
@@ -63,13 +75,14 @@ export const login = async (req, res) => {
 			return res.status(400).json({ error: "Invalid username or password" });
 		}
 
-		generateTokenAndSetCookie(user._id, res);
+		const token = generateTokenAndSetCookie(user._id, res);
 
 		res.status(200).json({
 			_id: user._id,
 			fullName: user.fullName,
 			username: user.username,
 			profilePic: user.profilePic,
+			token,
 		});
 	} catch (error) {
 		console.log("Error in login controller", error.message);
