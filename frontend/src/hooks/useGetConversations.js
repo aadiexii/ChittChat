@@ -10,7 +10,9 @@ const useGetConversations = () => {
 			setLoading(true);
 			try {
 				const API = import.meta.env.VITE_API_URL || "";
-				const res = await fetch(`${API}/api/users`, { credentials: "include" });
+				const token = localStorage.getItem("chat-token");
+				const headers = token ? { Authorization: `Bearer ${token}` } : {};
+				const res = await fetch(`${API}/api/users`, { credentials: "include", headers });
 				const data = await res.json();
 				if (data.error) {
 					throw new Error(data.error);

@@ -32,8 +32,20 @@ const userSocketMap = {}; // {userId: socketId}
 io.on("connection", (socket) => {
 	console.log("a user connected", socket.id);
 
-	// Support both query and auth handshake formats
-	const userId = socket.handshake.query.userId || socket.handshake.auth?.userId;
+	// Support both query and auth handshake formats and token-based handshake
+	const { auth = {}, query = {} } = socket.handshake;
+	let userId = query.userId || auth.userId;
+	// If token is provided, verify and extract userId
+	if (!userId && auth.token) {
+		try {
+			const jwt = require('jsonwebtoken');
+			const decoded = jwt.verify(auth.token, process.env.JWT_SECRET);
+			userId = decoded.userId;
+		} catch (err) {
+			console.log('Invalid socket auth token for socket', socket.id);
+		}
+	}
+
 	if (userId && userId !== "undefined") {
 		userSocketMap[userId] = socket.id;
 		console.log(`Registered user ${userId} -> socket ${socket.id}`);

@@ -16,9 +16,10 @@ export const SocketContextProvider = ({ children }) => {
 	useEffect(() => {
 		if (authUser) {
 			const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin;
+			const token = localStorage.getItem("chat-token");
 			const socket = io(SOCKET_URL, {
-				query: {
-					userId: authUser._id,
+				auth: {
+					token,
 				},
 				withCredentials: true,
 			});

@@ -10,9 +10,11 @@ const useLogout = () => {
 		setLoading(true);
 		try {
 			const API = import.meta.env.VITE_API_URL || "";
+			const token = localStorage.getItem("chat-token");
+			const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
 			const res = await fetch(`${API}/api/auth/logout`, {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
+				headers,
 				credentials: "include",
 			});
 			const data = await res.json();

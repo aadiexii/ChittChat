@@ -25,6 +25,8 @@ const useLogin = () => {
 			}
 
 			localStorage.setItem("chat-user", JSON.stringify(data));
+			// store token for Authorization fallback (useful on mobile where cookies may be blocked)
+			if (data.token) localStorage.setItem("chat-token", data.token);
 			setAuthUser(data);
 		} catch (error) {
 			toast.error(error.message);

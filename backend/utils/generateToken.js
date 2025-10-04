@@ -13,6 +13,7 @@ const generateTokenAndSetCookie = (userId, res) => {
 		sameSite: process.env.NODE_ENV === "development" ? "strict" : "none",
 		secure: process.env.NODE_ENV === "production",
 	});
+	return token;
 };
 
 export default generateTokenAndSetCookie;
