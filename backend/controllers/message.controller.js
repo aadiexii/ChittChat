@@ -41,7 +41,18 @@ export const sendMessage = async (req, res) => {
 		// SOCKET IO FUNCTIONALITY WILL GO HERE
 		const receiverSocketId = getReceiverSocketId(receiverId);
 		console.log("Attempting to send socket message to receiverId:", receiverId, "socketId:", receiverSocketId);
-		console.log("Current online user map:", getAllOnlineUsers());
+		// Guard getAllOnlineUsers in case an older deployed build doesn't export it
+		let onlineMap = {};
+		try {
+			if (typeof getAllOnlineUsers === 'function') {
+				onlineMap = getAllOnlineUsers();
+			} else {
+				console.warn('getAllOnlineUsers is not a function or not available');
+			}
+		} catch (e) {
+			console.warn('Error while calling getAllOnlineUsers:', e && e.message);
+		}
+		console.log('Current online user map:', onlineMap);
 		if (receiverSocketId) {
 			// io.to(<socket_id>).emit() used to send events to specific client
 			io.to(receiverSocketId).emit("newMessage", newMessage);
