@@ -106,18 +106,27 @@ Before you begin, ensure you have the following installed:
 
 ### Docker container setup
 
+*** Prerequisite ***
+
+Keep you docker instance running.
+
+- run docker desktop for windows
+
 1. **Frontend setup**:
-   -cd frontend
-   -cd docker-compose up -d
+   ```bash
+cd frontend
+docker-compose up -d
+```
 
    this will get the frontend running in a container
    you can access it at `http://localhost:3001`.
    No need to download the dependencies locally
 
 2. **Backend setup**:
-   -cd backend
-   -cd docker-compose up -d
-
+  ```bash
+cd backend
+docker-compose up -d
+```
    this will get the backendend running in a container
    you can access it at `http://localhost:3000`.
    No need to download the dependencies and setting up mongodb locally
