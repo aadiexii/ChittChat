@@ -26,13 +26,11 @@ export const signup = async (req, res) => {
       return res.status(400).json({ error: "Passwords don't match" });
     }
 
-		// Check for existing username or email
-		const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-		if (existingUser) {
-			if (existingUser.username === username) return res.status(400).json({ error: "Username already exists" });
-			if (email && existingUser.email === email) return res.status(400).json({ error: "Email already exists" });
-			return res.status(400).json({ error: "User already exists" });
-		}
+    // Check if username or email exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      return res.status(400).json({ error: "Username or email already exists" });
+    }
 
     // HASH PASSWORD HERE
     const salt = await bcrypt.genSalt(10);
