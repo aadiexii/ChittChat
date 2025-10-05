@@ -9,11 +9,13 @@ const useSendMessage = () => {
 	const sendMessage = async (message) => {
 		setLoading(true);
 		try {
-			const res = await fetch(`/api/messages/send/${selectedConversation._id}`, {
+			const API = import.meta.env.VITE_API_URL || "";
+			const token = localStorage.getItem("chat-token");
+			const headers = token ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" } : { "Content-Type": "application/json" };
+			const res = await fetch(`${API}/api/messages/send/${selectedConversation._id}`, {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
+				headers,
+				credentials: "include",
 				body: JSON.stringify({ message }),
 			});
 			const data = await res.json();
