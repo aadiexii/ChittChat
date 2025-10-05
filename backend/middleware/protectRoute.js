@@ -3,15 +3,23 @@ import User from "../models/user.model.js";
 
 const protectRoute = async (req, res, next) => {
 	try {
-		const token = req.cookies.jwt;
+		// Support cookie-based JWT or Authorization: Bearer <token>
+		let token = req.cookies?.jwt;
+		if (!token) {
+			const auth = req.headers.authorization || req.headers.Authorization || "";
+			if (auth && auth.startsWith("Bearer ")) {
+				token = auth.split(" ")[1];
+			}
+		}
 
 		if (!token) {
 			return res.status(401).json({ error: "Unauthorized - No Token Provided" });
 		}
 
-		const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-		if (!decoded) {
+		let decoded;
+		try {
+			decoded = jwt.verify(token, process.env.JWT_SECRET);
+		} catch (err) {
 			return res.status(401).json({ error: "Unauthorized - Invalid Token" });
 		}
 
