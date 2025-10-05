@@ -14,6 +14,7 @@ function App() {
 	const { authUser } = useAuthContext();
 	return (
 		<div className='p-4 h-screen flex items-center justify-center'>
+			{enableCursorTrail && <MagicCursorTrail />}
 			<Routes>
 				<Route path='/' element={authUser ? <Home /> : <Navigate to={"/login"} />} />
 				<Route path='/login' element={authUser ? <Navigate to='/' /> : <Login />} />
@@ -24,5 +25,7 @@ function App() {
 		</div>
 	);
 }
+
+
 
 export default App;
