@@ -31,11 +31,15 @@ export const sendMessage = async (req, res) => {
 		// await conversation.save();
 		// await newMessage.save();
 
-		// this will run in parallel
+		// save conversation and message in parallel
 		await Promise.all([conversation.save(), newMessage.save()]);
 
-		// SOCKET IO FUNCTIONALITY WILL GO HERE
+		// SOCKET IO: emit to receiver if they're online
 		const receiverSocketId = getReceiverSocketId(receiverId);
+		console.log("Attempting to send socket message to receiverId:", receiverId, "socketId:", receiverSocketId);
+		if (receiverSocketId) {
+			io.to(receiverSocketId).emit("newMessage", newMessage);
+		}
 		if (receiverSocketId) {
 			// io.to(<socket_id>).emit() used to send events to specific client
 			io.to(receiverSocketId).emit("newMessage", newMessage);
@@ -43,7 +47,7 @@ export const sendMessage = async (req, res) => {
 
 		res.status(201).json(newMessage);
 	} catch (error) {
-		console.log("Error in sendMessage controller: ", error.message);
+		console.error("Error in sendMessage controller:", error);
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
