@@ -113,20 +113,25 @@ Keep you docker instance running.
 - run docker desktop for windows
 
 1. **Frontend setup**:
-   ```bash
-cd frontend
-docker-compose up -d
+ ```
+ cd frontend
+
+ docker-compose up -d
 ```
+
 
    this will get the frontend running in a container
    you can access it at `http://localhost:3001`.
    No need to download the dependencies locally
 
+
 2. **Backend setup**:
-  ```bash
-cd backend
-docker-compose up -d
+ ```
+ cd backend
+  
+ docker-compose up -d
 ```
+  
    this will get the backendend running in a container
    you can access it at `http://localhost:3000`.
    No need to download the dependencies and setting up mongodb locally
