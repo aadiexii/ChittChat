@@ -48,7 +48,7 @@ const ForgotPassword = () => {
 
     return (
         <>
-            <h1 className="text-3xl font-semibold text-center text-gray-800 dark:text-gray-200">
+            <h1 className="text-3xl font-semibold text-center text-gray-800 dark:text-gray-200 mt-8">
                 Forgot Password
                 <span className="text-blue-500"> ChitChat</span>
             </h1>
