@@ -26,13 +26,15 @@ export const signup = async (req, res) => {
       return res.status(400).json({ error: "Passwords don't match" });
     }
 
-		// Check for existing username or email
-		const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-		if (existingUser) {
-			if (existingUser.username === username) return res.status(400).json({ error: "Username already exists" });
-			if (email && existingUser.email === email) return res.status(400).json({ error: "Email already exists" });
-			return res.status(400).json({ error: "User already exists" });
-		}
+    // Check for existing username or email
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      if (existingUser.username === username)
+        return res.status(400).json({ error: "Username already exists" });
+      if (email && existingUser.email === email)
+        return res.status(400).json({ error: "Email already exists" });
+      return res.status(400).json({ error: "User already exists" });
+    }
 
     // HASH PASSWORD HERE
     const salt = await bcrypt.genSalt(10);
@@ -57,12 +59,15 @@ export const signup = async (req, res) => {
       generateTokenAndSetCookie(newUser._id, res);
       const savedUser = await newUser.save();
 
-      const sendmail = await sendEmail(
-        newUser.email,
-        "Welcome to ChitChat! 🎉",
-        welcomeTemplate(newUser.fullName, newUser.username)
-      );
-
+      try {
+        const sendmail = await sendEmail(
+          newUser.email,
+          "Welcome to ChitChat! 🎉",
+          welcomeTemplate(newUser.fullName, newUser.username)
+        );
+      } catch (mailErr) {
+        console.error("Email send failed:", mailErr.message);
+      }
 
       res.status(201).json({
         _id: newUser._id,
@@ -122,7 +127,15 @@ export const requestOtp = async (req, res) => {
     await user.save();
 
     // Send OTP email
-    await sendEmail(email, "Your ChitChat OTP 🔑", otpPasswordTemplate(user.fullName, otp));
+    try {
+      await sendEmail(
+        email,
+        "Your ChitChat OTP 🔑",
+        otpPasswordTemplate(user.fullName, otp)
+      );
+    } catch (mailErr) {
+      console.error("Email send failed:", mailErr.message);
+    }
 
     res.status(200).json({ message: "OTP sent to your email" });
   } catch (error) {
@@ -140,8 +153,11 @@ export const resetPasswordWithOtp = async (req, res) => {
       return res.status(400).json({ error: "Passwords do not match" });
     }
 
-
-    const user = await User.findOne({ email, otp, otpExpire: { $gt: Date.now() } });
+    const user = await User.findOne({
+      email,
+      otp,
+      otpExpire: { $gt: Date.now() },
+    });
     if (!user) return res.status(400).json({ error: "Invalid or expired OTP" });
 
     const salt = await bcrypt.genSalt(10);
@@ -151,21 +167,23 @@ export const resetPasswordWithOtp = async (req, res) => {
 
     await user.save();
 
-
-    await sendEmail(
-      email,
-      "Password Changed Successfully ✅",
-      passwordChangedTemplate(user.fullName, "http://localhost:3000/login")
-    );
+    // Send email
+    try {
+      await sendEmail(
+        email,
+        "Password Changed Successfully ✅",
+        passwordChangedTemplate(user.fullName, "http://localhost:3000/login")
+      );
+    } catch (mailErr) {
+      console.error("Email send failed:", mailErr.message);
+    }
 
     res.status(200).json({ message: "Password reset successfully" });
-
   } catch (error) {
     console.error("Reset password OTP error:", error.message);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 export const logout = (req, res) => {
   try {
