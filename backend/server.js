@@ -8,6 +8,7 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/message.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import conversationRoutes from "./routes/conversation.route.js"
 
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
@@ -57,7 +58,7 @@ app.use(cors(corsOptions));
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
-
+app.use('/api/conversation',conversationRoutes)
 // Debug endpoint to help diagnose CORS/origin issues. Returns the incoming Origin header and allowed origins.
 app.get("/api/debug/origin", (req, res) => {
 	const incomingOrigin = req.headers.origin || null;
