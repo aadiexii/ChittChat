@@ -47,3 +47,36 @@ export const getProfile = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // from JWT in protectRoute
+    const { name, bio, avatar } = req.body;
+
+    // Validate at least one field
+    if (!name && !bio && !avatar) {
+      return res.status(400).json({ message: "At least one field is required." });
+    }
+
+    // Only allow updating specific fields
+    const updateData = {};
+    if (name) updateData.fullName = name;
+    if (bio) updateData.bio = bio;
+    if (avatar) updateData.profilePic = avatar;
+
+    // Update in DB and return the updated document
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    ).select('-password -__v'); // Exclude sensitive fields
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
