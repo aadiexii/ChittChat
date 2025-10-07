@@ -27,3 +27,23 @@ export const getUsersForSidebar = async (req, res) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
+
+
+export const getProfile = async (req, res) => {
+  try {
+    // req.user is populated by authMiddleware
+    const { fullName, email, username, profilePic } = req.user;
+
+	console.log(fullName)
+
+    res.status(200).json({
+      name: fullName,
+      email,
+      avatar: profilePic,
+      username
+    });
+  } catch (error) {
+    console.error("Get Profile Error:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
