@@ -7,24 +7,24 @@ import { otpPasswordTemplate } from "../utils/mailTemplates/otpPassword_mail.js"
 import { passwordChangedTemplate } from "../utils/mailTemplates/passwordChanged.js";
 
 export const signup = async (req, res) => {
-  try {
-    const { fullName, username, email, password, confirmPassword, gender } =
-      req.body;
+	try {
+		const { fullName, username, email, password, confirmPassword, gender } =
+			req.body;
 
-    if (
-      !fullName ||
-      !username ||
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !gender
-    ) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
+		if (
+			!fullName ||
+			!username ||
+			!email ||
+			!password ||
+			!confirmPassword ||
+			!gender
+		) {
+			return res.status(400).json({ error: "All fields are required" });
+		}
 
-    if (password !== confirmPassword) {
-      return res.status(400).json({ error: "Passwords don't match" });
-    }
+		if (password !== confirmPassword) {
+			return res.status(400).json({ error: "Passwords don't match" });
+		}
 
     // Check for existing username or email
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -84,34 +84,34 @@ export const signup = async (req, res) => {
   }
 };
 
+// ... the rest of the file (login, requestOtp, etc.) remains the same
 export const login = async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    const user = await User.findOne({ username });
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user?.password || ""
-    );
+	try {
+		const { username, email, password } = req.body;
+		const user = await User.findOne({ username });
+		const isPasswordCorrect = await bcrypt.compare(
+			password,
+			user?.password || ""
+		);
 
-    if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid username or password" });
-    }
+		if (!user || !isPasswordCorrect) {
+			return res.status(400).json({ error: "Invalid username or password" });
+		}
 
-    generateTokenAndSetCookie(user._id, res);
+		generateTokenAndSetCookie(user._id, res);
 
-    res.status(200).json({
-      _id: user._id,
-      fullName: user.fullName,
-      username: user.username,
-      profilePic: user.profilePic,
-    });
-  } catch (error) {
-    console.log("Error in login controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+		res.status(200).json({
+			_id: user._id,
+			fullName: user.fullName,
+			username: user.username,
+			profilePic: user.profilePic,
+		});
+	} catch (error) {
+		console.log("Error in login controller", error.message);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
 };
 
-// Request OTP for password reset
 export const requestOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -144,14 +144,13 @@ export const requestOtp = async (req, res) => {
   }
 };
 
-// Reset password with OTP
 export const resetPasswordWithOtp = async (req, res) => {
-  try {
-    const { email, otp, newPassword, confirmPassword } = req.body;
+	try {
+		const { email, otp, newPassword, confirmPassword } = req.body;
 
-    if (newPassword !== confirmPassword) {
-      return res.status(400).json({ error: "Passwords do not match" });
-    }
+		if (newPassword !== confirmPassword) {
+			return res.status(400).json({ error: "Passwords do not match" });
+		}
 
     const user = await User.findOne({
       email,
@@ -160,12 +159,12 @@ export const resetPasswordWithOtp = async (req, res) => {
     });
     if (!user) return res.status(400).json({ error: "Invalid or expired OTP" });
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
-    user.otp = undefined;
-    user.otpExpire = undefined;
+		const salt = await bcrypt.genSalt(10);
+		user.password = await bcrypt.hash(newPassword, salt);
+		user.otp = undefined;
+		user.otpExpire = undefined;
 
-    await user.save();
+		await user.save();
 
     // Send email
     try {
@@ -186,11 +185,11 @@ export const resetPasswordWithOtp = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  try {
-    res.cookie("jwt", "", { maxAge: 0 });
-    res.status(200).json({ message: "Logged out successfully" });
-  } catch (error) {
-    console.log("Error in logout controller", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+	try {
+		res.cookie("jwt", "", { maxAge: 0 });
+		res.status(200).json({ message: "Logged out successfully" });
+	} catch (error) {
+		console.log("Error in logout controller", error.message);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
 };
