@@ -1,30 +1,23 @@
-import nodemailer from "nodemailer";
+// utils/sendEmail.js
+import * as brevo from "@getbrevo/brevo";
 import dotenv from "dotenv";
-
-dotenv.config();  
-
-// Brevo SMTP transporter
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: false, // true for 465, false for other ports like 587
-  auth: {
-    user: process.env.SMTP_USER, // SMTP username
-    pass: process.env.SMTP_PASS, // SMTP password / API key
-  },
-});
+dotenv.config();
 
 export const sendEmail = async (to, subject, html) => {
   try {
-    await transporter.sendMail({
-      from: `"ChitChat" <${process.env.SMTP_EMAIL}>`, // sender email
-      to,
-      subject,
-      html,
-    });
-    console.log("Email sent successfully to", to);
+    const apiInstance = new brevo.TransactionalEmailsApi();
+    apiInstance.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
+
+    const sendSmtpEmail = new brevo.SendSmtpEmail();
+    sendSmtpEmail.subject = subject;
+    sendSmtpEmail.htmlContent = html;
+    sendSmtpEmail.sender = { name: "ChittChat", email: process.env.SMTP_EMAIL };
+    sendSmtpEmail.to = [{ email: to }];
+
+    const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("Email sent successfully:", response.messageId || "OK");
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error sending email:", error.response?.body || error.message);
     throw new Error("Email could not be sent");
   }
 };
