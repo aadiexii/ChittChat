@@ -28,23 +28,35 @@ const MessageInput = () => {
 	};
 
 	const uploadFile = async () => {
-		if (!file) return null;
-		const formData = new FormData();
-		formData.append("file", file);
-		try {
-			const res = await fetch("/api/upload", {
-				method: "POST",
-				body: formData,
-			});
-			const data = await res.json();
-			if (data.error) throw new Error(data.error);
-			return data;
-		} catch (error) {
-			toast.error("File upload failed. Please try again.");
-			console.error("File upload error", error);
-			return null;
-		}
+	  if (!file) return null;
+	
+	  const formData = new FormData();
+	  formData.append("file", file);
+	
+	  try {
+	    // Use API base URL from .env (works both locally & on Vercel)
+	    const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+	    const token = localStorage.getItem("chat-token");
+	
+	    const res = await fetch(`${API}/api/upload`, {
+	      method: "POST",
+	      credentials: "include",
+	      headers: {
+	        Authorization: `Bearer ${token}`,
+	      },
+	      body: formData,
+	    });
+	
+	    const data = await res.json();
+	    if (!res.ok) throw new Error(data.error || "Upload failed");
+	    return data;
+	  } catch (error) {
+	    toast.error("File upload failed. Please try again.");
+	    console.error("File upload error:", error);
+	    return null;
+	  }
 	};
+
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
