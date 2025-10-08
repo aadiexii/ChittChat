@@ -104,6 +104,38 @@ Before you begin, ensure you have the following installed:
 3. **Access the application**:
    Open your browser and go to `http://localhost:5000`.
 
+### Docker container setup
+
+*** Prerequisite ***
+
+Keep you docker instance running.
+
+- run docker desktop for windows
+
+1. **Frontend setup**:
+ ```
+ cd frontend
+
+ docker-compose up -d
+```
+
+
+   this will get the frontend running in a container
+   you can access it at `http://localhost:3001`.
+   No need to download the dependencies locally
+
+
+2. **Backend setup**:
+ ```
+ cd backend
+  
+ docker-compose up -d
+```
+  
+   this will get the backendend running in a container
+   you can access it at `http://localhost:3000`.
+   No need to download the dependencies and setting up mongodb locally
+
 ## Usage
 
 - Register for an account or log in with an existing one.
