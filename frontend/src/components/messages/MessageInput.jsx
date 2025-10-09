@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { BsSend, BsEmojiSmileFill, BsPaperclip } from "react-icons/bs";
 import { FaFileAlt } from "react-icons/fa";
 import useSendMessage from "../../hooks/useSendMessage";
-import Picker from "emoji-picker-react";
 import { ThemeContext } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
 
