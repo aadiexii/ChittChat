@@ -11,6 +11,7 @@ import { useAuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 import { ThemeContext } from "./context/ThemeContext";
 import AuthLayout from "./components/layout/AuthLayout";
+import Mainpage from "./pages/MainPage";
 
 function App() {
     const { authUser } = useAuthContext();
@@ -19,7 +20,7 @@ function App() {
     return (
         <div className='p-4 h-screen flex items-center justify-center'>
             <Routes>
-                <Route path='/' element={authUser ? <Home /> : <Navigate to={"/login"} />} />
+                <Route path='/' element={authUser ? <Home /> :<Mainpage/>} />
 
                 {/* All auth routes will now use the AuthLayout */}
                 <Route element={authUser ? <Navigate to='/' /> : <AuthLayout />}>
