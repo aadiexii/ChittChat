@@ -13,12 +13,12 @@ const ProfileButton = () => {
 
     return (
         <button
-            className="text-white px-4 py-2 rounded transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.8)]"
+            className="text-white px-2 py-1 rounded transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.8)]"
             onClick={() => navigate("/profile")}
         >
-            <img src={profileData?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData?.name || profileData?.username)}&background=0D8ABC&color=fff&rounded=true&size=200`} alt="user profile pic" className="w-20 h-20 rounded-full transition-all duration-300 hover:shadow-[0_0_25px_rgba(59,130,246,0.9)] hover:scale-110"
+            <img src={profileData?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData?.name || profileData?.username)}&background=0D8ABC&color=fff&rounded=true&size=128`} alt="user profile pic" className="w-12 h-12 rounded-full transition-all duration-300 hover:shadow-[0_0_25px_rgba(59,130,246,0.9)] hover:scale-110"
                 onError={(e) => {
-                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData.name || profileData.username)}&background=0D8ABC&color=fff&rounded=true&size=200`;
+                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(profileData.name || profileData.username)}&background=0D8ABC&color=fff&rounded=true&size=128`;
                 }}
             />
         </button>

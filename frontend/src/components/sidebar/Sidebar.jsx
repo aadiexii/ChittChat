@@ -10,7 +10,7 @@ const Sidebar = () => {
             <SearchInput />
             <div className='divider px-3'></div>
             <Conversations />
-            <div className='mt-auto flex items-center justify-between'>
+            <div className='mt-auto flex justify-between items-center gap-2'>
                 <ProfileButton />
                 <LogoutButton />
                 <ThemeToggle />
