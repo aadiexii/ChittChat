@@ -2,17 +2,20 @@ import { Link } from "react-router-dom";
 import GenderCheckbox from "./GenderCheckbox";
 import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
+import { IoEye } from "react-icons/io5";
+import { IoEyeOff } from "react-icons/io5";
 
 const SignUp = () => {
 	const [inputs, setInputs] = useState({
 		fullName: "",
 		email: "",
 		username: "",
-		password: "",
-		confirmPassword: "",
 		gender: "",
 	});
-
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+    const [showPassword1, setShowPassword1] = useState(false)
+    const [showPassword2, setShowPassword2] = useState(false)
 	const { loading, signup } = useSignup();
 
 	const handleCheckboxChange = (gender) => {
@@ -70,30 +73,34 @@ const SignUp = () => {
 					/>
 				</div>
 
-				<div>
+				<div className="relative">
 					<label className='label'>
 						<span className='text-base label-text text-gray-800 dark:text-gray-200'>Password</span>
 					</label>
 					<input
-						type='password'
+						type={showPassword1? 'text':'password'}
 						placeholder='Enter Password'
 						className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
-						value={inputs.password}
-						onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
 					/>
+					{!showPassword1 && <IoEye className="absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500" onClick={() => {setShowPassword1(true)}}/>}
+					{showPassword1 && <IoEyeOff className="absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px]  text-gray-500" onClick={() => {setShowPassword1(false)}}/>}
 				</div>
 
-				<div>
+				<div className="relative">
 					<label className='label'>
 						<span className='text-base label-text text-gray-800 dark:text-gray-200'>Confirm Password</span>
 					</label>
 					<input
-						type='password'
+						type={showPassword2?'text': 'password'}
 						placeholder='Confirm Password'
 						className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
-						value={inputs.confirmPassword}
-						onChange={(e) => setInputs({ ...inputs, confirmPassword: e.target.value })}
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
 					/>
+					{!showPassword2 && <IoEye className="absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500" onClick={() => {setShowPassword2(true)}}/>}
+					{showPassword2 && <IoEyeOff className="absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px]  text-gray-500" onClick={() => {setShowPassword2(false)}}/>}
 				</div>
 
 				<GenderCheckbox onCheckboxChange={handleCheckboxChange} selectedGender={inputs.gender} />
