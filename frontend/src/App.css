@@ -36,6 +36,22 @@
   }
 }
 
-body {
+/* body {
   cursor: none;
+} */
+
+/* Remove the global cursor: none and replace with custom cursor */
+body {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="white" stroke-width="2" opacity="0.8"/><circle cx="10" cy="10" r="3" fill="white" opacity="0.6"/></svg>') 10 10, auto;
 }
+
+/* Keep text cursor for inputs */
+input, textarea {
+  cursor: text;
+}
+
+/* Keep pointer cursor for buttons/links */
+button, a, [role="button"] {
+  cursor: pointer;
+}
+

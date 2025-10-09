@@ -2,9 +2,9 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { BsSend, BsPaperclip, BsEmojiSmileFill } from "react-icons/bs";
 import { FaFileAlt } from "react-icons/fa";
 import useSendMessage from "../../hooks/useSendMessage";
+import { ThemeContext } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
 import ExpressionPicker from "../picker/ExpressionPicker";
-import { ThemeContext } from "../../context/ThemeContext";
 
 const MessageInput = () => {
     const [message, setMessage] = useState("");
@@ -17,7 +17,6 @@ const MessageInput = () => {
     const { theme } = useContext(ThemeContext);
 
     const handleFileChange = (e) => {
-        // ... (this function is unchanged)
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
@@ -34,7 +33,6 @@ const MessageInput = () => {
     };
 
     const uploadFile = async () => {
-        // ... (this function is unchanged)
         if (!file) return null;
         const formData = new FormData();
         formData.append("file", file);
@@ -58,7 +56,6 @@ const MessageInput = () => {
     };
 
     const handleSubmit = async (e) => {
-        // ... (this function is unchanged)
         e.preventDefault();
         if (!message && !file) return;
         let fileData = null;
@@ -77,20 +74,18 @@ const MessageInput = () => {
 
     const handleEmojiClick = (emojiObject) => {
         setMessage((prevInput) => prevInput + emojiObject.emoji);
-        // Do not close the picker here, so user can select multiple emojis
+        // We don't close the picker here, so the user can select multiple emojis
     };
 
-    // This new function handles what happens when a GIF is clicked
     const handleGifSelect = async (gif) => {
-        setShowPicker(false); // Close the picker
-        // The GIF object from GIPHY has the url we need
+        setShowPicker(false); // Close the picker after selecting a GIF
+        // The GIF object from GIPHY has the URL we need
         const gifUrl = gif.images.downsized.url;
         // Send the GIF immediately as a message
         await sendMessage({ message: "", fileUrl: gifUrl, fileType: "image/gif" });
     };
 
     useEffect(() => {
-        // ... (this function is unchanged)
         const handleClickOutside = (event) => {
             if (pickerRef.current && !pickerRef.current.contains(event.target)) {
                 setShowPicker(false);
@@ -105,7 +100,7 @@ const MessageInput = () => {
     return (
         <>
             {preview && (
-                 <div className='px-4 my-2 flex items-center justify-between bg-gray-200 dark:bg-gray-700 p-2 rounded-lg'>
+                <div className='px-4 my-2 flex items-center justify-between bg-gray-200 dark:bg-gray-700 p-2 rounded-lg'>
                     <div className='flex items-center gap-2 overflow-hidden'>
                         {file && file.type.startsWith("image/") ? (
                             <img src={preview} alt='Preview' className='w-12 h-12 object-cover rounded' />
@@ -130,12 +125,12 @@ const MessageInput = () => {
                 <div className='w-full relative'>
                     {showPicker && (
                         <div ref={pickerRef} className="absolute bottom-12 right-0 z-10">
-                            {/* Pass the new handleGifSelect function as a prop */}
                             <ExpressionPicker onEmojiClick={handleEmojiClick} onGifSelect={handleGifSelect} />
                         </div>
                     )}
 
                     <input type='file' ref={fileInputRef} onChange={handleFileChange} style={{ display: "none" }} />
+                    
                     <input
                         type='text'
                         className='border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white'
@@ -167,4 +162,5 @@ const MessageInput = () => {
         </>
     );
 };
+
 export default MessageInput;
