@@ -1,8 +1,18 @@
 import { MessageCircle, Users, Zap, Shield, CheckCircle, Github, Mail, Twitter } from 'lucide-react';
+import { useState } from 'react';
+import AuthModal from './AuthModal';
 
 function Mainpage() {
-  const handleStartChatting = () => {
-    window.location.href = '/login';
+const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 4. Create a function to open the modal
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  // 5. Create a function to close the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -15,7 +25,7 @@ function Mainpage() {
             <span className="text-2xl font-bold text-slate-900">ChatFlow</span>
           </div>
           <button
-            onClick={handleStartChatting}
+            onClick={handleOpenModal}
             className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-blue-600/30"
           >
             Get Started
@@ -41,7 +51,7 @@ function Mainpage() {
             Built for modern communication.
           </p>
           <button
-            onClick={handleStartChatting}
+            onClick={handleOpenModal}
             className="group relative px-8 py-4 bg-blue-600 text-white rounded-full font-semibold text-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-2xl shadow-blue-600/40"
           >
             <span className="relative z-10">Start Chatting Now</span>
@@ -198,7 +208,7 @@ function Mainpage() {
 
           <div className="text-center mt-12">
             <button
-              onClick={handleStartChatting}
+              onClick={handleOpenModal}
               className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-105"
             >
               Join ChatFlow Today
@@ -298,7 +308,7 @@ function Mainpage() {
             Join our growing community and experience the future of instant messaging today.
           </p>
           <button
-            onClick={handleStartChatting}
+            onClick={handleOpenModal}
             className="px-8 py-4 bg-white text-blue-600 rounded-full font-semibold text-lg hover:bg-slate-50 transition-all duration-300 hover:scale-105 shadow-2xl"
           >
             Get Started for Free
@@ -369,6 +379,7 @@ function Mainpage() {
           </div>
         </div>
       </footer>
+           <AuthModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 }
