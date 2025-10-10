@@ -17,7 +17,7 @@ function App() {
     const { theme } = useContext(ThemeContext);
     const enableCursorTrail = true;
     return (
-        <div className=''>
+        <div >
             <Routes>
                 <Route path='/' element={<Mainpage/>} />
 
