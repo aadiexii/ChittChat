@@ -26,7 +26,7 @@ const useLogout = () => {
 			localStorage.removeItem("chat-user");
 			useConversation.persist.clearStorage(); // clearing the zustand local storage conversations on logout
 			const store = useConversation.getState(); 
-			store.setConversations({ users: [], nextCursor: null, hasNextPage: false });// clearing the zustand memory of the old conversations
+			store.setConversations({ users: [], nextCursor: null, hasNextPage: false },true);// clearing the zustand memory of the old conversations
 			setAuthUser(null);
 		} catch (error) {
 			toast.error(error.message);

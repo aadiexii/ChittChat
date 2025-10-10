@@ -130,7 +130,25 @@ Before you begin, ensure you have the following installed:
    
    - 💡For jwttoken, use '''openssl rand -base64 32''' in your terminal.
 
+### 💡 Setting Up the GIPHY API Key (for GIF Feature)
+
+To enable the GIF search feature, you will need a free API key from GIPHY.
+
+1.  **Create an Account:** Go to the [GIPHY Developers](https://developers.giphy.com/) website and create a free account.
+2.  **Create an App:** After logging in to your developer dashboard, click "Create an App". Select the "API" option.
+3.  **Get Your API Key:** Give your app a name and description. GIPHY will then provide you with your API Key. Copy this key.
+4.  **Add Key to `.env` File:** Open the `.env` file in the root of the project. Find the `VITE_GIPHY_API_KEY` line (or add it if it's not there) and paste your key after the equals sign.
+
+    The line in your `.env` file should look like this:
+    ```
+    VITE_GIPHY_API_KEY=d2s4f6g8h0j1k2l3...
+    ```
+
+5.  **Restart Your Server:** Stop and restart your development server for the key to be loaded.
+
+
 ### ▶️ Running the Project
+
 
 1. **Start the backend server**:
    ```bash
