@@ -116,12 +116,15 @@ Before you begin, ensure you have the following installed:
 
 3. Create a `.env` file in the backend folder to configure environment variables (e.g., MongoDB connection string, JWT secret).
 
-   ```bash
-   PORT=5000
-   MONGO_DB_URI=your_mongo_db_uri
-   JWT_SECRET=your_jwt_secret
-   NODE_ENV=development
-   ```
+
+    ```bash
+    PORT=5000
+    MONGO_DB_URI=mongodb://localhost:27017/
+    JWT_SECRET=your_jwt_secret
+    NODE_ENV=development
+    BREVO_API_KEY=your_api_key
+
+    ```
 
    - 💡For mongodb link, use cloud.mongodb.com -> Create Deployment -> Create User -> Allow Traffic 0.0.0.0 -> Connect via drivers ->Use username and password in project.
    
