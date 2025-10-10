@@ -218,7 +218,7 @@ function Mainpage() {
               Get Started in Three Simple Steps
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-              Join thousands of users already chatting on ChatFlow.
+              Join thousands of users already chatting on ChittChat.
             </p>
           </div>
 
@@ -249,7 +249,7 @@ function Mainpage() {
               onClick={handleOpenModal}
               className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-105"
             >
-              Join ChatFlow Today
+              Join ChittChat Today
             </button>
           </div>
         </div>
@@ -333,7 +333,7 @@ function Mainpage() {
             <div className="md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
                 <MessageCircle className="w-8 h-8 text-blue-400" />
-                <span className="text-2xl font-bold text-white">ChatFlow</span>
+                <span className="text-2xl font-bold text-white">ChittChat</span>
               </div>
               <p className="text-slate-400 leading-relaxed mb-4">
                 Real-time
@@ -386,7 +386,7 @@ messaging made simple. Connect with anyone, anywhere, instantly.
           </div>
 
           <div className="pt-8 border-t border-slate-800 text-center text-slate-400 text-sm">
-            <p>&copy; 2025 ChatFlow. All rights reserved. Built with passion for seamless communication.</p>
+            <p>&copy; 2025 ChittChat. All rights reserved. Built with passion for seamless communication.</p>
           </div>
         </div>
       </footer>
