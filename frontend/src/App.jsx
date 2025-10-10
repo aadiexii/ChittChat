@@ -17,7 +17,7 @@ function App() {
     const { theme } = useContext(ThemeContext);
     const enableCursorTrail = true;
     return (
-        <div className='p-4 h-screen flex items-center justify-center'>
+        <div className=''>
             <Routes>
                 <Route path='/' element={<Mainpage/>} />
 
