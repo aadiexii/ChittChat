@@ -53,6 +53,7 @@ const SignUp = () => {
             className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
             value={inputs.fullName}
             onChange={handleChange}
+            autoComplete="off"
           />
         </div>
 
@@ -70,6 +71,7 @@ const SignUp = () => {
             className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
             value={inputs.username}
             onChange={handleChange}
+            autoComplete="off"
           />
         </div>
 
@@ -87,6 +89,7 @@ const SignUp = () => {
             className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
             value={inputs.email}
             onChange={handleChange}
+            autoComplete="off"
           />
         </div>
 
@@ -104,6 +107,7 @@ const SignUp = () => {
             className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
             value={inputs.password}
             onChange={handleChange}
+            autoComplete="off"
           />
           {!showPassword1 ? (
             <IoEye
@@ -132,6 +136,7 @@ const SignUp = () => {
             className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
             value={inputs.confirmPassword}
             onChange={handleChange}
+            autoComplete="off"
           />
           {!showPassword2 ? (
             <IoEye
