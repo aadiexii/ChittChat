@@ -2,18 +2,26 @@ import { Link } from "react-router-dom";
 import GenderCheckbox from "./GenderCheckbox";
 import { useState } from "react";
 import useSignup from "../../hooks/useSignup";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 const SignUp = () => {
   const [inputs, setInputs] = useState({
     fullName: "",
     email: "",
     username: "",
+    gender: "",
     password: "",
     confirmPassword: "",
-    gender: "",
   });
 
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
   const { loading, signup } = useSignup();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
 
   const handleCheckboxChange = (gender) => {
     setInputs({ ...inputs, gender });
@@ -25,178 +33,142 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-      <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-        <h1 className="text-3xl font-semibold text-center text-gray-300">
-          Sign Up <span className="text-black"> ChitChat</span>
-        </h1>
+    <>
+      <h1 className='text-3xl font-semibold text-center text-gray-800 dark:text-gray-200'>
+        Sign Up <span className='text-blue-500'> ChitChat</span>
+      </h1>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Full Name</span>
-            </label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              className="w-full input input-bordered  h-10"
-              value={inputs.fullName}
-              onChange={(e) =>
-                setInputs({ ...inputs, fullName: e.target.value })
-              }
-            />
-          </div>
-
-          <div>
-            <label className="label p-2 ">
-              <span className="text-base label-text">Username</span>
-            </label>
-            <input
-              type="text"
-              placeholder="johndoe"
-              className="w-full input input-bordered h-10"
-              value={inputs.username}
-              onChange={(e) =>
-                setInputs({ ...inputs, username: e.target.value })
-              }
-            />
-          </div>
-
-          <div>
-            <label className="label p-2 ">
-              <span className="text-base label-text">Email</span>
-            </label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="w-full input input-bordered h-10"
-              value={inputs.email}
-              onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
-            />
-          </div>
-
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Password</span>
-            </label>
-            <input
-              type="password"
-              placeholder="Enter Password"
-              className="w-full input input-bordered h-10"
-              value={inputs.password}
-              onChange={(e) =>
-                setInputs({ ...inputs, password: e.target.value })
-              }
-            />
-          </div>
-
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Confirm Password</span>
-            </label>
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              className="w-full input input-bordered h-10"
-              value={inputs.confirmPassword}
-              onChange={(e) =>
-                setInputs({ ...inputs, confirmPassword: e.target.value })
-              }
-            />
-          </div>
-
-          <GenderCheckbox
-            onCheckboxChange={handleCheckboxChange}
-            selectedGender={inputs.gender}
+      <form onSubmit={handleSubmit} className='mt-6'>
+        {/* Full Name */}
+        <div>
+          <label className='label p-2'>
+            <span className='text-base label-text text-gray-800 dark:text-gray-200'>
+              Full Name
+            </span>
+          </label>
+          <input
+            type='text'
+            name='fullName'
+            placeholder='John Doe'
+            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            value={inputs.fullName}
+            onChange={handleChange}
           />
+        </div>
 
-          <Link
-            to={"/login"}
-            className="text-sm hover:underline hover:text-blue-600 mt-2 inline-block"
-            href="#"
+        {/* Username */}
+        <div>
+          <label className='label p-2'>
+            <span className='text-base label-text text-gray-800 dark:text-gray-200'>
+              Username
+            </span>
+          </label>
+          <input
+            type='text'
+            name='username'
+            placeholder='johndoe'
+            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            value={inputs.username}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className='label p-2'>
+            <span className='text-base label-text text-gray-800 dark:text-gray-200'>
+              Email
+            </span>
+          </label>
+          <input
+            type='email'
+            name='email'
+            placeholder='you@example.com'
+            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            value={inputs.email}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Password */}
+        <div className='relative'>
+          <label className='label'>
+            <span className='text-base label-text text-gray-800 dark:text-gray-200'>
+              Password
+            </span>
+          </label>
+          <input
+            type={showPassword1 ? "text" : "password"}
+            name='password'
+            placeholder='Enter Password'
+            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            value={inputs.password}
+            onChange={handleChange}
+          />
+          {!showPassword1 ? (
+            <IoEye
+              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500'
+              onClick={() => setShowPassword1(true)}
+            />
+          ) : (
+            <IoEyeOff
+              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500'
+              onClick={() => setShowPassword1(false)}
+            />
+          )}
+        </div>
+
+        {/* Confirm Password */}
+        <div className='relative'>
+          <label className='label'>
+            <span className='text-base label-text text-gray-800 dark:text-gray-200'>
+              Confirm Password
+            </span>
+          </label>
+          <input
+            type={showPassword2 ? "text" : "password"}
+            name='confirmPassword'
+            placeholder='Confirm Password'
+            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            value={inputs.confirmPassword}
+            onChange={handleChange}
+          />
+          {!showPassword2 ? (
+            <IoEye
+              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500'
+              onClick={() => setShowPassword2(true)}
+            />
+          ) : (
+            <IoEyeOff
+              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500'
+              onClick={() => setShowPassword2(false)}
+            />
+          )}
+        </div>
+
+        {/* Gender */}
+        <GenderCheckbox onCheckboxChange={handleCheckboxChange} selectedGender={inputs.gender} />
+
+        {/* Link to login */}
+        <Link
+          to={"/login"}
+          className='text-sm hover:underline hover:text-blue-600 mt-2 inline-block text-gray-800 dark:text-gray-200'
+        >
+          Already have an account?
+        </Link>
+
+        {/* Submit button */}
+        <div>
+          <button
+            className='btn btn-block btn-sm mt-2 border border-slate-700 bg-sky-500 text-white dark:bg-sky-600'
+            disabled={loading}
           >
-            Already have an account?
-          </Link>
-
-          <div>
-            <button
-              className="btn btn-block btn-sm mt-2 border border-slate-700 hover:bg-blue-600 hover:text-white transition-colors"
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="loading loading-spinner"></span>
-              ) : (
-                "Sign Up"
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+            {loading ? <span className='loading loading-spinner'></span> : "Sign Up"}
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
+
 export default SignUp;
-
-// STARTER CODE FOR THE SIGNUP COMPONENT
-// import GenderCheckbox from "./GenderCheckbox";
-
-// const SignUp = () => {
-// 	return (
-// 		<div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
-// 			<div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
-// 				<h1 className='text-3xl font-semibold text-center text-gray-300'>
-// 					Sign Up <span className='text-blue-500'> ChatApp</span>
-// 				</h1>
-
-// 				<form>
-// 					<div>
-// 						<label className='label p-2'>
-// 							<span className='text-base label-text'>Full Name</span>
-// 						</label>
-// 						<input type='text' placeholder='John Doe' className='w-full input input-bordered  h-10' />
-// 					</div>
-
-// 					<div>
-// 						<label className='label p-2 '>
-// 							<span className='text-base label-text'>Username</span>
-// 						</label>
-// 						<input type='text' placeholder='johndoe' className='w-full input input-bordered h-10' />
-// 					</div>
-
-// 					<div>
-// 						<label className='label'>
-// 							<span className='text-base label-text'>Password</span>
-// 						</label>
-// 						<input
-// 							type='password'
-// 							placeholder='Enter Password'
-// 							className='w-full input input-bordered h-10'
-// 						/>
-// 					</div>
-
-// 					<div>
-// 						<label className='label'>
-// 							<span className='text-base label-text'>Confirm Password</span>
-// 						</label>
-// 						<input
-// 							type='password'
-// 							placeholder='Confirm Password'
-// 							className='w-full input input-bordered h-10'
-// 						/>
-// 					</div>
-
-// 					<GenderCheckbox />
-
-// 					<a className='text-sm hover:underline hover:text-blue-600 mt-2 inline-block' href='#'>
-// 						Already have an account?
-// 					</a>
-
-// 					<div>
-// 						<button className='btn btn-block btn-sm mt-2 border border-slate-700'>Sign Up</button>
-// 					</div>
-// 				</form>
-// 			</div>
-// 		</div>
-// 	);
-// };
-// export default SignUp;

@@ -1,129 +1,76 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
+import { IoEye } from "react-icons/io5";
+import { IoEyeOff } from "react-icons/io5";
+
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+	const [loginInputs, setloginInputs] = useState("");
+	const [password, setPassword] = useState("");
+	const [showPassword, setShowPassword] = useState(false)
+	const { loading, login } = useLogin();
 
-  const { loading, login } = useLogin();
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		await login(loginInputs, password);
+	};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await login(username, password);
-  };
+	return (
+		<>
+			<h1 className='text-3xl font-semibold text-center text-gray-800 dark:text-gray-200'>
+				Login
+				<span className='text-blue-500'> ChitChat</span>
+			</h1>
 
-  return (
-    <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-      <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-        <h1 className="text-3xl font-semibold text-center text-gray-300">
-          Login
-          <span className="text-black"> ChitChat</span>
-        </h1>
+			<form onSubmit={handleSubmit} className='mt-6'>
+				<div>
+					<label className='label p-2'>
+						<span className='text-base label-text text-gray-800 dark:text-gray-200'>Email or Username</span>
+					</label>
+					<input
+						type='text'
+						placeholder='Enter email or username'
+						className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+						value={loginInputs}
+						onChange={(e) => setloginInputs(e.target.value)}
+					/>
+				</div>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label className="label p-2">
-              <span className="text-base label-text">Username</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter username"
-              className="w-full input input-bordered h-10"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
+				<div className="relative">
+					<label className='label mt-2'>
+						<span className='text-base label-text text-gray-800 dark:text-gray-200'>Password</span>
+					</label>
+					<input
+						type={showPassword? 'text':'password'}
+						placeholder='Enter Password'
+						className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+					/>
+					{!showPassword && <IoEye className="absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500" onClick={() => {setShowPassword(true)}}/>}
+					{showPassword && <IoEyeOff className="absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px]  text-gray-500" onClick={() => {setShowPassword(false)}}/>}
+				</div>
 
-          <div>
-            <label className="label">
-              <span className="text-base label-text">Password</span>
-            </label>
-            <input
-              type="password"
-              placeholder="Enter Password"
-              className="w-full input input-bordered h-10"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          {/* <Link
-            to="/signup"
-            className="text-sm  hover:underline hover:text-blue-600 mt-2 inline-block"
-          >
-            {"Don't"} have an account?
-          </Link> */}
+				<div className='flex justify-between items-center mt-4'>
+					<Link
+						to='/forgot-password'
+						className='text-sm hover:underline hover:text-blue-600 text-gray-800 dark:text-gray-200'
+					>
+						Forgot Password?
+					</Link>
+					<Link to='/signup' className='text-sm hover:underline hover:text-blue-600 text-gray-800 dark:text-gray-200'>
+						{"Don't"} have an account?
+					</Link>
+				</div>
 
-           <div className="flex justify-between items-center mt-2">
-            <Link
-              to="/forgot-password"
-              className="text-sm hover:underline hover:text-blue-600"
-            >
-              Forgot Password?
-            </Link>
-
-            <Link
-              to="/signup"
-              className="text-sm hover:underline hover:text-blue-600"
-            >
-              {"Don't"} have an account?
-            </Link>
-          </div>
-
-          <div>
-            <button className="btn btn-block btn-sm mt-2 hover:bg-blue-600 hover:text-white transition-colors" disabled={loading}>
-              {loading ? (
-                <span className="loading loading-spinner "></span>
-              ) : (
-                "Login"
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+				<div>
+					<button className='btn btn-block btn-sm mt-4 bg-sky-500 text-white dark:bg-sky-600' disabled={loading}>
+						{loading ? <span className='loading loading-spinner '></span> : "Login"}
+					</button>
+				</div>
+			</form>
+		</>
+	);
 };
 export default Login;
-
-// STARTER CODE FOR THIS FILE
-// const Login = () => {
-// 	return (
-// 		<div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
-// 			<div className='w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0'>
-// 				<h1 className='text-3xl font-semibold text-center text-gray-300'>
-// 					Login
-// 					<span className='text-blue-500'> ChatApp</span>
-// 				</h1>
-
-// 				<form>
-// 					<div>
-// 						<label className='label p-2'>
-// 							<span className='text-base label-text'>Username</span>
-// 						</label>
-// 						<input type='text' placeholder='Enter username' className='w-full input input-bordered h-10' />
-// 					</div>
-
-// 					<div>
-// 						<label className='label'>
-// 							<span className='text-base label-text'>Password</span>
-// 						</label>
-// 						<input
-// 							type='password'
-// 							placeholder='Enter Password'
-// 							className='w-full input input-bordered h-10'
-// 						/>
-// 					</div>
-// 					<a href='#' className='text-sm  hover:underline hover:text-blue-600 mt-2 inline-block'>
-// 						{"Don't"} have an account?
-// 					</a>
-
-// 					<div>
-// 						<button className='btn btn-block btn-sm mt-2'>Login</button>
-// 					</div>
-// 				</form>
-// 			</div>
-// 		</div>
-// 	);
-// };
-// export default Login;

@@ -7,10 +7,15 @@ export default defineConfig({
 	server: {
 		port: 3000,
 		proxy: (() => {
-			const API = process.env.VITE_API_URL || "http://localhost:5000";
+			const API_URL = process.env.VITE_API_URL || "http://localhost:5000";
 			return {
 				"/api": {
-					target: API,
+					target: API_URL,
+					changeOrigin: true,
+				},
+				// This adds the necessary rule for your uploaded files
+				"/uploads": {
+					target: API_URL,
 					changeOrigin: true,
 				},
 			};
