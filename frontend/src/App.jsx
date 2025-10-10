@@ -9,14 +9,15 @@ import { useAuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 import { ThemeContext } from "./context/ThemeContext";
 import AuthLayout from "./components/layout/AuthLayout";
+import MagicCursorTrail from "./components/MagicCursorTrail"; // Adjust path as needed
 import Mainpage from "./pages/MainPage.jsx";
 
 function App() {
     const { authUser } = useAuthContext();
     const { theme } = useContext(ThemeContext);
-
+    const enableCursorTrail = true;
     return (
-        <div >
+        <div className='p-4 h-screen flex items-center justify-center'>
             <Routes>
                 <Route path='/' element={<Mainpage/>} />
 
