@@ -123,12 +123,18 @@ Before you begin, ensure you have the following installed:
     JWT_SECRET=your_jwt_secret
     NODE_ENV=development
     BREVO_API_KEY=your_api_key
-
+    FRONTEND_URLS=<your_localhost>,<official_domain>[Multiple links can be provided separated by ',']
+    SMTP_EMAIL=your_brevo_smtp_mail
+    SMTP_HOST=smtp-relay.brevo.com
+    SMTP_PASS=your_smtp_brevo_master_password
+    SMTP_PORT=587
+    SMTP_USER=your_smtp_brevo_user
+    VITE_API_URL=your_backend_link
+    VITE_SOCKET_URL=your_backend_link
     ```
-
-   - 💡For mongodb link, use cloud.mongodb.com -> Create Deployment -> Create User -> Allow Traffic 0.0.0.0 -> Connect via drivers ->Use username and password in project.
+   - 💡For ``mongodb`` link, use ```cloud.mongodb.com -> Create Deployment -> Create User -> Allow Traffic 0.0.0.0 -> Connect via drivers ->Use username and password in project```.
    
-   - 💡For jwttoken, use '''openssl rand -base64 32''' in your terminal.
+   - 💡To generate ``jwttoken`` , use ```openssl rand -base64 32``` in your terminal.
 
 ### 💡 Setting Up the GIPHY API Key (for GIF Feature)
 
@@ -231,11 +237,9 @@ We welcome contributions from developers of all levels.
 
 This project is licensed under The MIT License (MIT)
 
-Copyright (c) 2015 Chris Kibble
-
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+The credit notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
