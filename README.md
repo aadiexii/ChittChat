@@ -232,6 +232,8 @@ We welcome contributions from developers of all levels.
 - Spammy or low-quality PRs
 - Automated PRs without meaningful changes
 
+## 📖 Inspiration
+![burakorkmez]((https://github.com/burakorkmez))
 
 ## 📄 License
 
