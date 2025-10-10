@@ -1,4 +1,4 @@
-# 💬 Real-Time Chatting Application
+# 💬 ChittChat: Real-Time Chatting Application
 
 This project is a **real-time chatting application** built using the **MERN stack** (MongoDB, Express, React, and Node.js). It allows users to engage in dynamic, real-time conversations with one another. The application is responsive and scalable, designed to deliver a seamless chatting experience.
 
