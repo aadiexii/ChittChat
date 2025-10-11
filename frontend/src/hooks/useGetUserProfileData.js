@@ -8,9 +8,10 @@ const useGetUserProfileData = () => {
 
   const fetchProfile = useCallback(async (signal) => {
     setLoading(true);
+    const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
     try {
-      const res = await fetch('http://localhost:5000/api/users/profile', {
+      const res = await fetch(`${API}/api/users/profile`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
