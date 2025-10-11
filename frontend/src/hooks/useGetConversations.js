@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import useConversation from "../zustand/useConversation";
 
-const useGetConversations = (initialLimit = 1) => { // initial limit set this low for testing purpose only
+const useGetConversations = (initialLimit = 5) => { 
   const [loading, setLoading] = useState(true);
   const { conversations, setConversations } = useConversation();// using zustand store to get conversations
 
