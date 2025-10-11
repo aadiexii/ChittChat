@@ -1,5 +1,4 @@
 import Conversations from "./Conversations";
-import LogoutButton from "./LogoutButton";
 import SearchInput from "./SearchInput";
 import ThemeToggle from "../ThemeToggle";
 import ProfileButton from "../profile/ProfileButton";
@@ -12,7 +11,6 @@ const Sidebar = () => {
             <Conversations />
             <div className='mt-auto flex justify-between items-center gap-2'>
                 <ProfileButton />
-                <LogoutButton />
                 <ThemeToggle />
             </div>
         </div>
