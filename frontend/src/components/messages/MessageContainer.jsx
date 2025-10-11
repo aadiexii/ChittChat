@@ -1,12 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useConversation from "../../zustand/useConversation";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+import TypingIndicator from "./TypingIndicator";
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
 
 const MessageContainer = () => {
     const { selectedConversation, setSelectedConversation } = useConversation();
+    const [isTyping, setIsTyping] = useState(false);
+
+    useEffect(() => {
+        // Simulate typing for demo purposes
+        if (selectedConversation) {
+        setIsTyping(true);
+        const timer = setTimeout(() => setIsTyping(false), 2000);
+        return () => clearTimeout(timer);
+        }
+    }, [selectedConversation]);
 
     useEffect(() => {
         // cleanup function (unmounts)
@@ -25,6 +36,7 @@ const MessageContainer = () => {
                         <span className='text-gray-900 dark:text-white font-bold'>{selectedConversation.fullName}</span>
                     </div>
                     <Messages />
+                    {isTyping && <TypingIndicator />}
                     <MessageInput />
                 </>
             )}
