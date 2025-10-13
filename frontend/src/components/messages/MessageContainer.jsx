@@ -5,19 +5,41 @@ import Messages from "./Messages";
 import TypingIndicator from "./TypingIndicator";
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
+import { useSocketContext } from "../../context/SocketContext";
 
 const MessageContainer = () => {
     const { selectedConversation, setSelectedConversation } = useConversation();
     const [isTyping, setIsTyping] = useState(false);
+    const { socket } = useSocketContext();
 
     useEffect(() => {
-        // Simulate typing for demo purposes
-        if (selectedConversation) {
+    if (!socket || !selectedConversation) return;
+
+    const currentConversationId = selectedConversation._id;
+
+    const handleTyping = ({ from }) => {
+        if (from === currentConversationId) {
         setIsTyping(true);
-        const timer = setTimeout(() => setIsTyping(false), 2000);
-        return () => clearTimeout(timer);
         }
-    }, [selectedConversation]);
+    };
+
+    const handleStopTyping = ({ from }) => {
+        if (from === currentConversationId) {
+        setIsTyping(false);
+        }
+    };
+
+    socket.on("typing", handleTyping);
+    socket.on("stop_typing", handleStopTyping);
+
+    setIsTyping(false); // reset when switching chats
+
+    return () => {
+        socket.off("typing", handleTyping);
+        socket.off("stop_typing", handleStopTyping);
+    };
+    }, [socket, selectedConversation]);
+
 
     useEffect(() => {
         // cleanup function (unmounts)
