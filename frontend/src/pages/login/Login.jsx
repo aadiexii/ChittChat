@@ -34,6 +34,7 @@ const Login = () => {
 						className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
 						value={loginInputs}
 						onChange={(e) => setloginInputs(e.target.value)}
+						autoComplete="off"
 					/>
 				</div>
 
@@ -47,6 +48,7 @@ const Login = () => {
 						className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
+						autoComplete="off"
 					/>
 					{!showPassword && <IoEye className="absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500" onClick={() => {setShowPassword(true)}}/>}
 					{showPassword && <IoEyeOff className="absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px]  text-gray-500" onClick={() => {setShowPassword(false)}}/>}
