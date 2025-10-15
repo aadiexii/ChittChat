@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useContext } from "react";
-import { BsSend, BsEmojiSmileFill, BsPaperclip } from "react-icons/bs";
+import { BsSend, BsPaperclip, BsEmojiSmileFill } from "react-icons/bs";
 import { FaFileAlt } from "react-icons/fa";
 import useSendMessage from "../../hooks/useSendMessage";
 import { ThemeContext } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
+import ExpressionPicker from "../picker/ExpressionPicker";
 
 const MessageInput = () => {
     const [message, setMessage] = useState("");
@@ -17,7 +18,12 @@ const MessageInput = () => {
 
     const onEmojiClick = (emojiObject) => {
         setMessage((prevInput) => prevInput + emojiObject.emoji);
+    };
+
+    const handleGifSelect = async (gif) => {
         setShowPicker(false);
+        const gifUrl = gif.images.downsized.url;
+        await sendMessage({ message: "", fileUrl: gifUrl, fileType: "image/gif" });
     };
 
     const handleFileChange = (e) => {
@@ -26,9 +32,7 @@ const MessageInput = () => {
             setFile(selectedFile);
             if (selectedFile.type.startsWith("image/")) {
                 const reader = new FileReader();
-                reader.onloadend = () => {
-                    setPreview(reader.result);
-                };
+                reader.onloadend = () => { setPreview(reader.result); };
                 reader.readAsDataURL(selectedFile);
             } else {
                 setPreview(selectedFile.name);
@@ -38,47 +42,35 @@ const MessageInput = () => {
 
     const uploadFile = async () => {
         if (!file) return null;
-    
         const formData = new FormData();
         formData.append("file", file);
-    
         try {
-            // Use API base URL from .env (works both locally & on Vercel)
             const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
             const token = localStorage.getItem("chat-token");
-    
             const res = await fetch(`${API}/api/upload`, {
                 method: "POST",
                 credentials: "include",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
                 body: formData,
             });
-    
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Upload failed");
             return data;
         } catch (error) {
             toast.error("File upload failed. Please try again.");
-            console.error("File upload error:", error);
             return null;
         }
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!message && !file) return;
-
         let fileData = null;
         if (file) {
             fileData = await uploadFile();
             if (!fileData) return;
         }
-
         await sendMessage({ message, fileUrl: fileData?.fileUrl, fileType: fileData?.fileType });
-        
         setMessage("");
         setFile(null);
         setPreview(null);
@@ -90,7 +82,9 @@ const MessageInput = () => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (pickerRef.current && !pickerRef.current.contains(event.target)) {
-                setShowPicker(false);
+                 if (!event.target.closest('.picker-toggle-button')) {
+                    setShowPicker(false);
+                }
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -117,8 +111,8 @@ const MessageInput = () => {
             <form className='px-4 my-3' onSubmit={handleSubmit}>
                 <div className='w-full relative'>
                     {showPicker && (
-                        <div ref={pickerRef} className="absolute bottom-12 right-0 z-10">
-                            <Picker onEmojiClick={onEmojiClick} theme={theme} />
+                        <div ref={pickerRef} className="absolute bottom-full right-0 mb-2 z-10">
+                            <ExpressionPicker onEmojiClick={onEmojiClick} onGifSelect={handleGifSelect} />
                         </div>
                     )}
                     <input type="file" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} />
@@ -130,10 +124,10 @@ const MessageInput = () => {
                         onChange={(e) => setMessage(e.target.value)}
                     />
                     <div className="absolute inset-y-0 end-0 flex items-center pe-3">
-                         <button type='button' className="p-1 text-gray-800 dark:text-white" onClick={() => fileInputRef.current.click()}>
+                        <button type='button' className="p-1 text-gray-800 dark:text-white" onClick={() => fileInputRef.current.click()}>
                             <BsPaperclip />
                         </button>
-                        <button type='button' className="p-1 text-gray-800 dark:text-white" onClick={() => setShowPicker(val => !val)}>
+                        <button type='button' className="p-1 text-gray-800 dark:text-white picker-toggle-button" onClick={() => setShowPicker(val => !val)}>
                             <BsEmojiSmileFill />
                         </button>
                         <button type='submit' className='p-1 text-gray-800 dark:text-white'>
