@@ -10,7 +10,7 @@ const GifPicker = ({ onGifSelect }) => {
 
     const fetchGifs = async (searchQuery) => {
         if (!giphyApiKey) {
-            console.error("GIPHY API Key is missing!");
+            console.error("GIPHY API Key is missing! Make sure it's in your .env file and you have restarted the dev server.");
             toast.error("GIPHY service is not configured.");
             return;
         }
@@ -37,7 +37,7 @@ const GifPicker = ({ onGifSelect }) => {
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault();
+            e.preventDefault(); 
             fetchGifs(query);
         }
     };

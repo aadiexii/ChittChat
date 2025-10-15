@@ -5,6 +5,8 @@ import useSendMessage from "../../hooks/useSendMessage";
 import { ThemeContext } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
 import ExpressionPicker from "../picker/ExpressionPicker";
+import { useSocketContext } from "../../context/SocketContext";
+import useConversation from "../../zustand/useConversation";
 
 const MessageInput = () => {
     const [message, setMessage] = useState("");
@@ -12,9 +14,11 @@ const MessageInput = () => {
     const [preview, setPreview] = useState(null);
     const [showPicker, setShowPicker] = useState(false);
     const { loading, sendMessage } = useSendMessage();
-    const { theme } = useContext(ThemeContext);
-    const pickerRef = useRef(null);
     const fileInputRef = useRef(null);
+    const pickerRef = useRef(null);
+    const { socket } = useSocketContext();
+    const { theme } = useContext(ThemeContext);
+    const { selectedConversation } = useConversation();
 
     const onEmojiClick = (emojiObject) => {
         setMessage((prevInput) => prevInput + emojiObject.emoji);
@@ -78,7 +82,7 @@ const MessageInput = () => {
             fileInputRef.current.value = "";
         }
     };
-
+    
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (pickerRef.current && !pickerRef.current.contains(event.target)) {
@@ -96,16 +100,25 @@ const MessageInput = () => {
     return (
         <>
             {preview && (
-                <div className="px-4 my-2 flex items-center justify-between bg-gray-200 dark:bg-gray-700 p-2 rounded-lg">
-                    <div className="flex items-center gap-2 overflow-hidden">
+                <div className='px-4 my-2 flex items-center justify-between bg-gray-200 dark:bg-gray-700 p-2 rounded-lg'>
+                    <div className='flex items-center gap-2 overflow-hidden'>
                         {file && file.type.startsWith("image/") ? (
-                            <img src={preview} alt="Preview" className="w-12 h-12 object-cover rounded" />
+                            <img src={preview} alt='Preview' className='w-12 h-12 object-cover rounded' />
                         ) : (
-                            <FaFileAlt className="w-8 h-8 text-gray-800 dark:text-gray-200 flex-shrink-0" />
+                            <FaFileAlt className='w-8 h-8 text-gray-800 dark:text-gray-200 flex-shrink-0' />
                         )}
-                        <span className="text-sm text-gray-800 dark:text-gray-200 truncate">{file?.name}</span>
+                        <span className='text-sm text-gray-800 dark:text-gray-200 truncate'>{file?.name}</span>
                     </div>
-                    <button onClick={() => { setFile(null); setPreview(null); if(fileInputRef.current) fileInputRef.current.value = ""; }} className="text-red-500 font-bold p-2">X</button>
+                    <button
+                        onClick={() => {
+                            setFile(null);
+                            setPreview(null);
+                            if (fileInputRef.current) fileInputRef.current.value = "";
+                        }}
+                        className='text-red-500 font-bold p-2'
+                    >
+                        X
+                    </button>
                 </div>
             )}
             <form className='px-4 my-3' onSubmit={handleSubmit}>
@@ -115,13 +128,25 @@ const MessageInput = () => {
                             <ExpressionPicker onEmojiClick={onEmojiClick} onGifSelect={handleGifSelect} />
                         </div>
                     )}
-                    <input type="file" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} />
+
+                    <input type='file' ref={fileInputRef} onChange={handleFileChange} style={{ display: "none" }} />
+                    
                     <input
                         type='text'
                         className='border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white'
                         placeholder='Send a message'
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                        onChange={(e) => {
+                            setMessage(e.target.value);
+                            if (socket && selectedConversation?._id) {
+                                socket.emit("typing", { to: selectedConversation._id });
+                            }
+                        }}
+                        onBlur={() => {
+                            if (socket && selectedConversation?._id) {
+                                socket.emit("stop_typing", { to: selectedConversation._id });
+                            }
+                        }}
                     />
                     <div className="absolute inset-y-0 end-0 flex items-center pe-3">
                         <button type='button' className="p-1 text-gray-800 dark:text-white" onClick={() => fileInputRef.current.click()}>
