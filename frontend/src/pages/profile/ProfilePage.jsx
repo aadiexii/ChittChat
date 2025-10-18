@@ -16,7 +16,7 @@ const ProfilePage = () => {
         if (profileData) {
             setProfileForm({
                 name: profileData.name || '',
-                about: profileData?.about || '',
+                about: profileData.about || '',
                 avatar: profileData.avatar || ''
             });
         }
@@ -38,6 +38,7 @@ const ProfilePage = () => {
     const handleSave = async () => {
         try {
             await updateProfile(profileForm);
+            profileData.about = profileForm.about;
             setIsEditing(false);
         } catch (error) {
             console.error('Failed to update profile:', error);
@@ -75,6 +76,10 @@ const ProfilePage = () => {
                                 <div className="flex justify-center space-x-4">
                                     <span className="font-bold">Email:</span>
                                     <p>{profileData.email}</p>
+                                </div>
+                                <div className="flex justify-center space-x-4">
+                                    <span className="font-bold">About me:</span>
+                                    <p>{profileData.about}</p>
                                 </div>
                                 <div className="flex justify-center space-x-4">
                                     <span className="font-bold">Name:</span>
