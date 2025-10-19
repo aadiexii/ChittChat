@@ -8,6 +8,7 @@ const ProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [profileForm, setProfileForm] = useState({
         name: profileData?.name || '',
+        about: profileData?.about || '',
         avatar: profileData?.avatar || ''
     });
 
@@ -15,6 +16,7 @@ const ProfilePage = () => {
         if (profileData) {
             setProfileForm({
                 name: profileData.name || '',
+                about: profileData.about || '',
                 avatar: profileData.avatar || ''
             });
         }
@@ -36,6 +38,7 @@ const ProfilePage = () => {
     const handleSave = async () => {
         try {
             await updateProfile(profileForm);
+            profileData.about = profileForm.about;
             setIsEditing(false);
         } catch (error) {
             console.error('Failed to update profile:', error);
@@ -45,6 +48,7 @@ const ProfilePage = () => {
     const handleCancel = () => {
         setProfileForm({
             name: profileData.name || '',
+            about: profileData.about || '',
             avatar: profileData.avatar || ''
         });
         setIsEditing(false);
@@ -72,6 +76,10 @@ const ProfilePage = () => {
                                 <div className="flex justify-center space-x-4">
                                     <span className="font-bold">Email:</span>
                                     <p>{profileData.email}</p>
+                                </div>
+                                <div className="flex justify-center space-x-4">
+                                    <span className="font-bold">About me:</span>
+                                    <p>{profileData.about}</p>
                                 </div>
                                 <div className="flex justify-center space-x-4">
                                     <span className="font-bold">Name:</span>
@@ -109,7 +117,16 @@ const ProfilePage = () => {
                                     className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 text-white"
                                 />
                             </label>
-
+                            <label className="text-gray-700 dark:text-gray-300 font-semibold">
+                                About Me
+                                <textarea
+                                    name="about"
+                                    value={profileForm.about}
+                                    onChange={handleInputChange}
+                                    rows={2}
+                                    className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 text-white"
+                                />
+                            </label>
                             <label className="text-gray-700 dark:text-gray-300 font-semibold">
                                 Avatar URL
                                 <input
