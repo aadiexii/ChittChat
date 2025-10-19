@@ -20,15 +20,23 @@ const MessageInput = () => {
     const { theme } = useContext(ThemeContext);
     const { selectedConversation } = useConversation();
 
+    const onEmojiClick = (emojiObject) => {
+        setMessage((prevInput) => prevInput + emojiObject.emoji);
+    };
+
+    const handleGifSelect = async (gif) => {
+        setShowPicker(false);
+        const gifUrl = gif.images.downsized.url;
+        await sendMessage({ message: "", fileUrl: gifUrl, fileType: "image/gif" });
+    };
+
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             setFile(selectedFile);
             if (selectedFile.type.startsWith("image/")) {
                 const reader = new FileReader();
-                reader.onloadend = () => {
-                    setPreview(reader.result);
-                };
+                reader.onloadend = () => { setPreview(reader.result); };
                 reader.readAsDataURL(selectedFile);
             } else {
                 setPreview(selectedFile.name);
@@ -54,7 +62,6 @@ const MessageInput = () => {
             return data;
         } catch (error) {
             toast.error("File upload failed. Please try again.");
-            console.error("File upload error:", error);
             return null;
         }
     };
@@ -75,24 +82,13 @@ const MessageInput = () => {
             fileInputRef.current.value = "";
         }
     };
-
-    const handleEmojiClick = (emojiObject) => {
-        setMessage((prevInput) => prevInput + emojiObject.emoji);
-        // We don't close the picker here, so the user can select multiple emojis
-    };
-
-    const handleGifSelect = async (gif) => {
-        setShowPicker(false); // Close the picker after selecting a GIF
-        // The GIF object from GIPHY has the URL we need
-        const gifUrl = gif.images.downsized.url;
-        // Send the GIF immediately as a message
-        await sendMessage({ message: "", fileUrl: gifUrl, fileType: "image/gif" });
-    };
-
+    
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (pickerRef.current && !pickerRef.current.contains(event.target)) {
-                setShowPicker(false);
+                 if (!event.target.closest('.picker-toggle-button')) {
+                    setShowPicker(false);
+                }
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -128,8 +124,8 @@ const MessageInput = () => {
             <form className='px-4 my-3' onSubmit={handleSubmit}>
                 <div className='w-full relative'>
                     {showPicker && (
-                        <div ref={pickerRef} className="absolute bottom-12 right-0 z-10">
-                            <ExpressionPicker onEmojiClick={handleEmojiClick} onGifSelect={handleGifSelect} />
+                        <div ref={pickerRef} className="absolute bottom-full right-0 mb-2 z-10">
+                            <ExpressionPicker onEmojiClick={onEmojiClick} onGifSelect={handleGifSelect} />
                         </div>
                     )}
 
@@ -140,31 +136,23 @@ const MessageInput = () => {
                         className='border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white'
                         placeholder='Send a message'
                         value={message}
-                          onChange={(e) => {
+                        onChange={(e) => {
                             setMessage(e.target.value);
                             if (socket && selectedConversation?._id) {
-                            socket.emit("typing", { to: selectedConversation._id });
+                                socket.emit("typing", { to: selectedConversation._id });
                             }
                         }}
                         onBlur={() => {
                             if (socket && selectedConversation?._id) {
-                            socket.emit("stop_typing", { to: selectedConversation._id });
+                                socket.emit("stop_typing", { to: selectedConversation._id });
                             }
                         }}
                     />
-                    <div className='absolute inset-y-0 end-0 flex items-center pe-3'>
-                        <button
-                            type='button'
-                            className='p-1 text-gray-800 dark:text-white'
-                            onClick={() => fileInputRef.current.click()}
-                        >
+                    <div className="absolute inset-y-0 end-0 flex items-center pe-3">
+                        <button type='button' className="p-1 text-gray-800 dark:text-white" onClick={() => fileInputRef.current.click()}>
                             <BsPaperclip />
                         </button>
-                        <button 
-                            type='button' 
-                            className='p-1 text-gray-800 dark:text-white'
-                            onClick={() => setShowPicker(val => !val)}
-                        >
+                        <button type='button' className="p-1 text-gray-800 dark:text-white picker-toggle-button" onClick={() => setShowPicker(val => !val)}>
                             <BsEmojiSmileFill />
                         </button>
                         <button type='submit' className='p-1 text-gray-800 dark:text-white'>

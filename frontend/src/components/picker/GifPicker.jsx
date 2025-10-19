@@ -6,7 +6,6 @@ const GifPicker = ({ onGifSelect }) => {
     const [query, setQuery] = useState('');
     const [loading, setLoading] = useState(false);
     
-    // This is the secure way to get the key from the .env file
     const giphyApiKey = import.meta.env.VITE_GIPHY_API_KEY;
 
     const fetchGifs = async (searchQuery) => {
@@ -33,12 +32,12 @@ const GifPicker = ({ onGifSelect }) => {
     };
 
     useEffect(() => {
-        fetchGifs(''); // Fetch trending GIFs on initial load
+        fetchGifs(''); 
     }, []);
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); // Prevents the main form from submitting
+            e.preventDefault(); 
             fetchGifs(query);
         }
     };
