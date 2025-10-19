@@ -5,6 +5,8 @@ import useSendMessage from "../../hooks/useSendMessage";
 import { ThemeContext } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
 import ExpressionPicker from "../picker/ExpressionPicker";
+import { useSocketContext } from "../../context/SocketContext";
+import useConversation from "../../zustand/useConversation";
 
 const MessageInput = () => {
     const [message, setMessage] = useState("");
@@ -14,7 +16,9 @@ const MessageInput = () => {
     const { loading, sendMessage } = useSendMessage();
     const fileInputRef = useRef(null);
     const pickerRef = useRef(null);
+    const { socket } = useSocketContext();
     const { theme } = useContext(ThemeContext);
+    const { selectedConversation } = useConversation();
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
@@ -136,7 +140,17 @@ const MessageInput = () => {
                         className='border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-300 text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-white'
                         placeholder='Send a message'
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
+                          onChange={(e) => {
+                            setMessage(e.target.value);
+                            if (socket && selectedConversation?._id) {
+                            socket.emit("typing", { to: selectedConversation._id });
+                            }
+                        }}
+                        onBlur={() => {
+                            if (socket && selectedConversation?._id) {
+                            socket.emit("stop_typing", { to: selectedConversation._id });
+                            }
+                        }}
                     />
                     <div className='absolute inset-y-0 end-0 flex items-center pe-3'>
                         <button
