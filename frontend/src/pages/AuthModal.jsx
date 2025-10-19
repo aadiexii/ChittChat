@@ -20,7 +20,7 @@ function AuthModal({ isOpen, onClose }) {
     >
       {/* Modal Content */}
       <div
-        className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative"
+        className="bg-gray-100 rounded-2xl dark:bg-gray-900 shadow-2xl p-5 w-full max-w-md relative"
         onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside the modal
       >
         {/* Close Button */}
