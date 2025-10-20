@@ -44,6 +44,7 @@ export const signup = async (req, res) => {
 
     const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
     const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+    const neutralProfilePic = `https://avatar.iran.liara.run/public/neutral?username=${username}`;
 
     const newUser = new User({
       fullName,
@@ -51,7 +52,7 @@ export const signup = async (req, res) => {
       username,
       password: hashedPassword,
       gender,
-      profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+      profilePic: gender === "male" ?  boyProfilePic: gender === "female"? girlProfilePic: neutralProfilePic,
     });
 
     if (newUser) {
