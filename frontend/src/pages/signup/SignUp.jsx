@@ -33,9 +33,9 @@ const SignUp = () => {
   };
 
   return (
-    <>
+    <div className='bg-gray-100 dark:bg-gray-900  transition-colors duration-300'>
       <h1 className='text-3xl font-semibold text-center text-gray-800 dark:text-gray-200'>
-        Sign Up <span className='text-blue-500'> ChitChat</span>
+        Sign Up <span className='text-blue-500 dark:text-blue-400'> ChitChat</span>
       </h1>
 
       <form onSubmit={handleSubmit} className='mt-6'>
@@ -50,7 +50,7 @@ const SignUp = () => {
             type='text'
             name='fullName'
             placeholder='John Doe'
-            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            className='w-full input input-bordered h-10 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600'
             value={inputs.fullName}
             onChange={handleChange}
             autoComplete="off"
@@ -68,7 +68,7 @@ const SignUp = () => {
             type='text'
             name='username'
             placeholder='johndoe'
-            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            className='w-full input input-bordered h-10 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600'
             value={inputs.username}
             onChange={handleChange}
             autoComplete="off"
@@ -86,7 +86,7 @@ const SignUp = () => {
             type='email'
             name='email'
             placeholder='you@example.com'
-            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            className='w-full input input-bordered h-10 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600'
             value={inputs.email}
             onChange={handleChange}
             autoComplete="off"
@@ -104,19 +104,19 @@ const SignUp = () => {
             type={showPassword1 ? "text" : "password"}
             name='password'
             placeholder='Enter Password'
-            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            className='w-full input input-bordered h-10 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600'
             value={inputs.password}
             onChange={handleChange}
             autoComplete="off"
           />
           {!showPassword1 ? (
             <IoEye
-              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500'
+              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500 dark:text-gray-300'
               onClick={() => setShowPassword1(true)}
             />
           ) : (
             <IoEyeOff
-              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500'
+              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500 dark:text-gray-300'
               onClick={() => setShowPassword1(false)}
             />
           )}
@@ -133,31 +133,34 @@ const SignUp = () => {
             type={showPassword2 ? "text" : "password"}
             name='confirmPassword'
             placeholder='Confirm Password'
-            className='w-full input input-bordered h-10 bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
+            className='w-full input input-bordered h-10 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600'
             value={inputs.confirmPassword}
             onChange={handleChange}
             autoComplete="off"
           />
           {!showPassword2 ? (
             <IoEye
-              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500'
+              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500 dark:text-gray-300'
               onClick={() => setShowPassword2(true)}
             />
           ) : (
             <IoEyeOff
-              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500'
+              className='absolute top-[51px] right-[15px] cursor-pointer w-[20px] h-[20px] text-gray-500 dark:text-gray-300'
               onClick={() => setShowPassword2(false)}
             />
           )}
         </div>
 
         {/* Gender */}
-        <GenderCheckbox onCheckboxChange={handleCheckboxChange} selectedGender={inputs.gender} />
+        <GenderCheckbox
+          onCheckboxChange={handleCheckboxChange}
+          selectedGender={inputs.gender}
+        />
 
         {/* Link to login */}
         <Link
           to={"/login"}
-          className='text-sm hover:underline hover:text-blue-600 mt-2 inline-block text-gray-800 dark:text-gray-200'
+          className='text-sm hover:underline hover:text-blue-600 dark:hover:text-blue-400 mt-2 inline-block text-gray-800 dark:text-gray-200'
         >
           Already have an account?
         </Link>
@@ -165,14 +168,14 @@ const SignUp = () => {
         {/* Submit button */}
         <div>
           <button
-            className='btn btn-block btn-sm mt-2 border border-slate-700 bg-sky-500 text-white dark:bg-sky-600'
+            className='btn btn-block btn-sm mt-2 border border-slate-700 dark:border-slate-500 bg-sky-500 text-white dark:bg-sky-600 dark:hover:bg-sky-500'
             disabled={loading}
           >
             {loading ? <span className='loading loading-spinner'></span> : "Sign Up"}
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

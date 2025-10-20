@@ -1,5 +1,6 @@
 import MessageContainer from "../../components/messages/MessageContainer";
 import Sidebar from "../../components/sidebar/Sidebar";
+import "../home/Home.css"
 // import ProfileButton from "../../components/profile/ProfileButton";
 
 const Home = () => {
