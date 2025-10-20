@@ -1,6 +1,6 @@
 const GenderCheckbox = ({ onCheckboxChange, selectedGender }) => {
     return (
-        <div className='flex'>
+        <div className='flex mt-3 '>
             <div className='form-control'>
                 <label className={`label gap-2 cursor-pointer ${selectedGender === "male" ? "selected" : ""} `}>
                     <span className={`label-text text-gray-800 dark:text-gray-200 ${selectedGender === "male" ? "font-semibold text-sky-400 dark:text-sky-600" : ""}`}>Male</span>
