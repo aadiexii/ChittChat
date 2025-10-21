@@ -13,11 +13,11 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
-
+  
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const { loading, signup } = useSignup();
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputs({ ...inputs, [name]: value });
