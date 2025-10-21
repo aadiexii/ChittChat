@@ -19,16 +19,19 @@ function App() {
     const { theme } = useContext(ThemeContext);
     const enableCursorTrail = true;
     return (
-        <div >
+        <div>
             <Routes>
                 <Route path='/' element={<Mainpage/>} />
 
                 {/* All auth routes will now use the AuthLayout */}
-                <Route element={authUser ? <Navigate to='/' /> : <AuthLayout />}>
+                <Route element={authUser ? <Navigate to='/chat' /> : <AuthLayout />}>
                     <Route path='/login' element={<Login />} />
                     <Route path='/signup' element={<SignUp />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                 </Route>
+
+                {/* added route to chat room */}
+                <Route path='/chat' element={<Home/>} />
             </Routes>
             <Toaster
                 toastOptions={{

@@ -33,7 +33,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className='bg-gray-100 dark:bg-gray-900  transition-colors duration-300'>
+    <div className='p-6 bg-gray-100 dark:bg-gray-900  transition-colors duration-300'>
       <h1 className='text-3xl font-semibold text-center text-gray-800 dark:text-gray-200'>
         Sign Up <span className='text-blue-500 dark:text-blue-400'> ChitChat</span>
       </h1>

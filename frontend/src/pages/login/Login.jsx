@@ -18,12 +18,12 @@ const Login = () => {
 
 	return (
 		<>
-			<h1 className='text-3xl font-semibold text-center text-gray-800 dark:text-gray-200'>
+			<h1 className='mt-6 text-3xl font-semibold text-center text-gray-800 dark:text-gray-200'>
 				Login
 				<span className='text-blue-500'> ChitChat</span>
 			</h1>
 
-			<form onSubmit={handleSubmit} className='mt-6'>
+			<form onSubmit={handleSubmit} className='my-6 mx-6'>
 				<div>
 					<label className='label p-2'>
 						<span className='text-base label-text text-gray-800 dark:text-gray-200'>Email or Username</span>

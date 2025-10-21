@@ -53,7 +53,7 @@ const ForgotPassword = () => {
                 <span className="text-blue-500"> ChitChat</span>
             </h1>
 
-            <form className="mt-4">
+            <form className="mx-6 my-6">
                 <div>
                     <label className="label p-2">
                         <span className="text-base label-text text-gray-800 dark:text-gray-200">Email</span>

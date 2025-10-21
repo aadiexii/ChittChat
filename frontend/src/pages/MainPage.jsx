@@ -12,13 +12,14 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import AuthModal from "./AuthModal";
+import { useNavigate } from "react-router-dom";
 
 function Mainpage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
-
+  const navigate = useNavigate()
   // Apply theme on load
   useEffect(() => {
     if (isDarkMode) {
@@ -62,7 +63,7 @@ function Mainpage() {
 
             {/* Get Started Button */}
             <button
-              onClick={handleOpenModal}
+              onClick={()=> navigate("/login")}
               className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-lg shadow-blue-600/30"
             >
               Get Started
@@ -92,7 +93,7 @@ function Mainpage() {
             communication.
           </p>
           <button
-            onClick={handleOpenModal}
+            onClick={()=> navigate("/login")}
             className="group relative px-8 py-4 bg-blue-600 text-white rounded-full font-semibold text-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105 shadow-2xl shadow-blue-600/40"
           >
             <span className="relative z-10">Start Chatting Now</span>
@@ -246,7 +247,7 @@ function Mainpage() {
 
           <div className="text-center mt-12">
             <button
-              onClick={handleOpenModal}
+              onClick={()=> navigate("/login")}
               className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-105"
             >
               Join ChittChat Today
@@ -318,7 +319,7 @@ function Mainpage() {
             messaging today.
           </p>
           <button
-            onClick={handleOpenModal}
+            onClick={()=> navigate("/login")}
             className="px-8 py-4 bg-white text-blue-600 rounded-full font-semibold text-lg hover:bg-slate-50 transition-all duration-300 hover:scale-105 shadow-2xl"
           >
             Get Started for Free
