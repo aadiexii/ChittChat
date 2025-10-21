@@ -21,18 +21,21 @@ function App() {
     return (
         <div>
             <Routes>
-                <Route path='/' element={<Mainpage/>} />
+                <Route path='/' element={<Mainpage />} />
 
-                {/* All auth routes will now use the AuthLayout */}
-                <Route element={authUser ? <Navigate to='/chat' /> : <AuthLayout />}>
+                <Route element={!authUser ? <AuthLayout /> : <Navigate to='/chat' />}>
                     <Route path='/login' element={<Login />} />
                     <Route path='/signup' element={<SignUp />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path='/forgot-password' element={<ForgotPassword />} />
                 </Route>
 
-                {/* added route to chat room */}
-                <Route path='/chat' element={<Home/>} />
-            </Routes>
+                {authUser && (
+                    <>
+                    <Route path='/chat' element={<Home />} />
+                    <Route path='/profile' element={<ProfilePage />} />
+                    </>
+                )}
+                </Routes>
             <Toaster
                 toastOptions={{
                     style: {
