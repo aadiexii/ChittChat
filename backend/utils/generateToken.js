@@ -14,7 +14,7 @@ const generateTokenAndSetCookie = (userId, res) => {
     sameSite: isProduction ? "none" : "lax",  // allow cross-origin only in prod
     maxAge: 365 * 24 * 60 * 60 * 1000,        // 1 year
     // ↓↓↓ Optional: add Partitioned attribute for Chrome future-proofing
-    partitioned: true,
+    partitioned: true, // if you are getting a error on developmet regarding unauthorized login try commenting this feature out
   });
 
   return token;
