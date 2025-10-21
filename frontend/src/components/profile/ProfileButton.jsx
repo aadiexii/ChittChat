@@ -11,7 +11,6 @@ const ProfileButton = () => {
     const containerRef = useRef(null);
     const menuRef = useRef(null);
 
-    console.log("Profile Data:", profileData);
 
     useEffect(() => {
         function handleClickOutside(e) {

@@ -65,12 +65,12 @@ io.on("connection", (socket) => {
 
 	// Extract userId from handshake (query or auth)
 	const { auth = {}, query = {} } = socket.handshake;
-	let userId = query.userId || auth.userId;
+	let userId = query.userId || auth?.token?.userId;
 
-	if (!userId && auth.token) {
+	if (!userId && auth?.token) {
 		try {
 			const jwt = require("jsonwebtoken");
-			const decoded = jwt.verify(auth.token, process.env.JWT_SECRET);
+			const decoded = jwt.verify(auth?.token?.token, process.env.JWT_SECRET);
 			userId = decoded.userId;
 		} catch (err) {
 			console.log("❌ Invalid socket auth token:", err.message);
