@@ -16,7 +16,8 @@ export const SocketContextProvider = ({ children }) => {
 	useEffect(() => {
 		if (authUser) {
 			const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin;
-			const token = localStorage.getItem("chat-token");
+			const token = JSON.parse(localStorage.getItem("chat-token")); // getting the parsed token from local storage
+
 			const socket = io(SOCKET_URL, {
 				auth: {
 					token,
